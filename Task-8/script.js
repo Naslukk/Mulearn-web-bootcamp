@@ -1,45 +1,44 @@
-// JavaScript for Image Gallery
+const displayedImage = document.querySelector('.displayed-img');
+const thumbBar = document.querySelector('.thumb-bar');
 
-const images = document.querySelectorAll('.image img');
-const imageDescription = document.querySelector('.image-description p');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-let currentIndex = 0;
+const btn = document.querySelector('button');
+const overlay = document.querySelector('.overlay');
 
-// Initialize the gallery
-showImage(currentIndex);
+/* Declaring the array of image filenames */
 
-// Show image and description based on index
-function showImage(index) {
-    images.forEach((image, i) => {
-        if (i === index) {
-            image.style.display = 'block';
-        } else {
-            image.style.display = 'none';
-        }
+const images = ['pic1.jpg', `pic2.jpg`, `pic3.jpg`, `pic4.jpg`, `pic5.jpg`];
+const alts = {
+    'pic1.jpg': 'Closeup of a human eye',
+    'pic2.jpg': 'Rock that looks like a wave',
+    'pic3.jpg': 'Purple and white pansies',
+    'pic4.jpg': 'Section of wall from a pharoah\'s tomb',
+    'pic5.jpg': 'Large moth on a leaf'
+}
+
+/* Looping through images */
+
+for (const image of images) {
+    const newImage = document.createElement('img');
+    newImage.setAttribute('src', `images/${image}`);
+    newImage.setAttribute('alt', alts[image]);
+    thumbBar.appendChild(newImage);
+    newImage.addEventListener('click', e => {
+        displayedImage.src = e.target.src;
+        displayedImage.alt = e.target.alt;
     });
-    updateDescription(index);
 }
 
-// Update image description
-function updateDescription(index) {
-    const descriptions = [
-        "Image 1 Description",
-        "Image 2 Description",
-        "Image 3 Description",
-        // Add more descriptions here
-    ];
+/* Wiring up the Darken/Lighten button */
 
-    imageDescription.textContent = descriptions[index];
-}
-
-// Event listeners for navigation
-prevBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    showImage(currentIndex);
-});
-
-nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % images.length;
-    showImage(currentIndex);
+btn.addEventListener('click', () => {
+    const btnClass = btn.getAttribute('class');
+    if (btnClass === 'dark') {
+        btn.setAttribute('class', 'light');
+        btn.textContent = 'Lighten';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    } else {
+        btn.setAttribute('class', 'dark');
+        btn.textContent = 'Darken';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+    }
 });
